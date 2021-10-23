@@ -9,12 +9,31 @@ import Foundation
 import HypercutFoundation
 
 public struct HypercutExportConfiguration {
-  public var pauseSpeed: CGFloat = 0.7
-  public var phraseSpeed: CGFloat = 0.0
-  public var playbackSpeed: CGFloat = 0.0
+  
+  public init(
+    pauseSpeed: CGFloat,
+    phraseSpeed: CGFloat,
+    playbackSpeed: CGFloat
+  ) {
+    self.pauseSpeed = pauseSpeed
+    self.phraseSpeed = phraseSpeed
+    self.playbackSpeed = playbackSpeed
+  }
+  
+  public var pauseSpeed: CGFloat
+  public var phraseSpeed: CGFloat
+  public var playbackSpeed: CGFloat
 }
 
 public struct HypercutExportSession {
+  
+  public init(
+    phrases: [Phrase],
+    spaces: [Space]
+  ) {
+    self.phrases = phrases
+    self.spaces = spaces
+  }
   
   public var phrases: [Phrase]
   public var spaces: [Space]
