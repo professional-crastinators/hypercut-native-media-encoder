@@ -73,17 +73,16 @@ public struct HypercutExportSession {
       }
     }
     
-    return HypercutExportPlan(timecodes: tracktimebuilder)
+    return HypercutExportPlan(timecodes: tracktimebuilder, runtime: {
+      tracktimebuilder.reduce(0.0) { resultBuilder, trackTime in
+        return resultBuilder + trackTime.duration
+      }
+    }())
   }
   
 }
 
 public struct HypercutExportPlan {
   var timecodes: [TrackTime]
-  
-  var runtime: Double {
-    timecodes.reduce(0.0) { resultBuilder, trackTime in
-      return resultBuilder + trackTime.duration
-    }
-  }
+  public var runtime: Double
 }
