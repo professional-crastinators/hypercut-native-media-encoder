@@ -7,7 +7,7 @@
 
 import AVFoundation
 
-struct MediaConverter {
+public struct MediaConverter {
   
   let filepath: URL
   
@@ -19,7 +19,7 @@ struct MediaConverter {
     .urls(for: .documentDirectory, in: .userDomainMask)[0]
     .appendingPathComponent("hypercut-audio.m4a")
   
-  func getAudio(_ completion: @escaping (Data) -> ()) {
+  public func getAudio(_ completion: @escaping (Data) -> ()) {
     let asset = AVAsset(url: filepath)
     
     asset.writeAudioTrack(to: newURL) {
