@@ -34,13 +34,7 @@ extension AVAsset {
       asset: self,
       presetName: AVAssetExportPresetAppleM4A
     ) else {
-      // This is just a generic error
-      let error = NSError(
-        domain: "domain",
-        code: 0,
-        userInfo: nil)
-      failure(error)
-      
+      failure(MediaEncoderError.failExport)
       return
     }
     
@@ -52,11 +46,9 @@ extension AVAsset {
       case .completed:
         success()
       case .unknown, .waiting, .exporting, .failed, .cancelled:
-        let error = NSError(domain: "domain", code: 0, userInfo: nil)
-        failure(error)
+        failure(MediaEncoderError.fileAlreadyExists)
       @unknown default:
-        let error = NSError(domain: "domain", code: 0, userInfo: nil)
-        failure(error)
+        failure(MediaEncoderError.unknown)
       }
     }
   }
@@ -71,8 +63,6 @@ extension AVAsset {
         withMediaType: .audio,
         preferredTrackID: kCMPersistentTrackID_Invalid)
       do {
-        // Add the current audio track at the beginning of
-        // the asset for the duration of the source AVAsset
         try compositionTrack?.insertTimeRange(
           track.timeRange,
           of: track,

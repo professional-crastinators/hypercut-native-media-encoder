@@ -17,7 +17,7 @@ public struct MediaConverter {
   
   var newURL = FileManager.default
     .urls(for: .documentDirectory, in: .userDomainMask)[0]
-    .appendingPathComponent("hypercut-audio.m4a")
+    .appendingPathComponent("hypercut-audio-\(UUID().uuidString).m4a")
   
   public func getAudio(_ completion: @escaping (Data) -> ()) {
     let asset = AVAsset(url: filepath)
