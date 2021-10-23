@@ -4,25 +4,31 @@
 import PackageDescription
 
 let package = Package(
-    name: "hypercut-native-media-encoder",
-    products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(
-            name: "hypercut-native-media-encoder",
-            targets: ["hypercut-native-media-encoder"]),
-    ],
-    dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
-    ],
-    targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .target(
-            name: "hypercut-native-media-encoder",
-            dependencies: []),
-        .testTarget(
-            name: "hypercut-native-media-encoderTests",
-            dependencies: ["hypercut-native-media-encoder"]),
-    ]
+  name: "HypercutMediaEncoder",
+  platforms: [
+    .iOS(.v13),
+    .macOS(.v10_11)
+  ],
+  products: [
+    // Products define the executables and libraries a package produces, and make them visible to other packages.
+    .library(
+      name: "HypercutMediaEncoder",
+      targets: ["HypercutMediaEncoder"]),
+  ],
+  dependencies: [
+    .package(
+      name: "HypercutFoundation", 
+      url: "https://github.com/professional-crastinators/hypercut-native-foundation.git",
+      .branch("main"))
+  ],
+  targets: [
+    // Targets are the basic building blocks of a package. A target can define a module or a test suite.
+    // Targets can depend on other targets in this package, and on products in packages this package depends on.
+    .target(
+      name: "HypercutMediaEncoder",
+      dependencies: ["HypercutFoundation"]),
+    .testTarget(
+      name: "HypercutMediaEncoderTests",
+      dependencies: ["HypercutMediaEncoder"]),
+  ]
 )
