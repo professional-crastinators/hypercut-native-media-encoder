@@ -11,7 +11,7 @@ public struct MediaConverter {
   
   let filepath: URL
   
-  init(filepath: URL) {
+  public init(filepath: URL) {
     self.filepath = filepath
   }
   
