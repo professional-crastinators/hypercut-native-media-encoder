@@ -13,12 +13,13 @@ extension AVAsset {
   // the audio file if successful
   func writeCutTrack(
     to url: URL,
-    timecodes: [TimecodeInterval],
+    timecodes: HypercutExportPlan,
     success: @escaping () -> (),
+    progress: @escaping (Float) -> (),
     failure: @escaping (Error) -> ()
   ) {
     do {
-      let asset = try cutAsset(timecodes: timecodes)
+      let asset = try speedAsset(timecodes: timecodes, progress: progress)
       asset.writeCut(to: url, success: success, failure: failure)
     } catch {
       failure(error)
@@ -54,13 +55,18 @@ extension AVAsset {
     }
   }
   
-  private func cutAsset(timecodes: [TimecodeInterval]) throws -> AVAsset {
+  private func speedAsset(
+    timecodes: HypercutExportPlan,
+    progress: @escaping (Float) -> ()
+  ) throws -> AVAsset {
     let composition = AVMutableComposition()
     let allTracks = tracks
     
-    let trimPoints = timecodes.map { interval in
-      (CMTime.init(seconds: interval.start, preferredTimescale: 1),
-       CMTime.init(seconds: interval.end, preferredTimescale: 1))
+    var completed: Float = 0
+    let increment = 1.0 / Float(timecodes.timecodes.count * allTracks.count)
+    let callback = {
+      completed += increment
+      progress(completed)
     }
     
     for track in allTracks {
@@ -71,19 +77,28 @@ extension AVAsset {
       compositionTrack?.preferredTransform = track.preferredTransform
       
       var accumulatedTime = CMTime.zero
-      for (start, end) in trimPoints {
-        let durationOfCurrentSlice = CMTimeSubtract(end, start)
-        let timeRangeForCurrentSlice = CMTimeRangeMake(start: start, duration: durationOfCurrentSlice)
+      for trackTime in timecodes.timecodes {
+        let durationOfCurrentSlice = CMTimeSubtract(
+          trackTime.endTime, trackTime.startTime)
+        let timeRangeForCurrentSlice = CMTimeRangeMake(
+          start: trackTime.startTime, duration: durationOfCurrentSlice)
         do {
-          try compositionTrack?.insertTimeRange(timeRangeForCurrentSlice, of: track, at: accumulatedTime)
+          try compositionTrack?.insertTimeRange(
+            timeRangeForCurrentSlice, of: track, at: accumulatedTime)
+          if trackTime.durationTime != durationOfCurrentSlice {
+            compositionTrack?.scaleTimeRange(
+              timeRangeForCurrentSlice, toDuration: trackTime.durationTime)
+          }
         } catch {
           print(error)
         }
-        accumulatedTime = CMTimeAdd(accumulatedTime, durationOfCurrentSlice)
+        accumulatedTime = CMTimeAdd(accumulatedTime, trackTime.durationTime)
+        
+        callback()
       }
-      
-
     }
+    
+    progress(1.0)
     
     return composition
   }

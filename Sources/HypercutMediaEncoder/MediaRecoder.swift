@@ -20,11 +20,16 @@ public struct MediaRecoder {
     .urls(for: .documentDirectory, in: .userDomainMask)[0]
     .appendingPathComponent("hypercut-\(UUID().uuidString).mov")
   
-  public func getCut(timecodes: [TimecodeInterval], _ completion: @escaping (URL) -> ()) {
+  public func getCut(
+    timecodes: HypercutExportPlan, 
+    progress: @escaping (Float) -> (), 
+    completion: @escaping (URL) -> ()) {
     let asset = AVAsset(url: filepath)
     
     asset.writeCutTrack(to: newURL, timecodes: timecodes) { 
       completion(newURL)
+    } progress: { value in
+      progress(value)
     } failure: { error in
       fatalError(error.localizedDescription)
     }
