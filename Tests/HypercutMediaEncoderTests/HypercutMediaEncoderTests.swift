@@ -1,5 +1,6 @@
 import XCTest
 @testable import HypercutMediaEncoder
+import HypercutFoundation
 
 final class HypercutMediaEncoderTests: XCTestCase {
   func testExtract() throws {
