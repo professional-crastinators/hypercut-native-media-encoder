@@ -88,8 +88,10 @@ extension AVAsset {
           try compositionTrack?.insertTimeRange(
             timeRangeForCurrentSlice, of: track, at: accumulatedTime)
           if trackTime.durationTime != durationOfCurrentSlice {
+            let timeRangeRecode = CMTimeRangeMake(
+              start: accumulatedTime, duration: durationOfCurrentSlice)
             compositionTrack?.scaleTimeRange(
-              timeRangeForCurrentSlice, toDuration: trackTime.durationTime)
+              timeRangeRecode, toDuration: trackTime.durationTime)
           }
         } catch {
           print(error)
