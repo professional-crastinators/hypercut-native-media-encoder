@@ -17,7 +17,7 @@ public struct HypercutExportConfiguration {
   ) {
     self.pauseSpeed = pauseSpeed
     self.phraseSpeed = phraseSpeed
-    self.playbackSpeed = playbackSpeed
+    self.playbackSpeed = playbackSpeed * 3 + 1
   }
   
   public var pauseSpeed: CGFloat
