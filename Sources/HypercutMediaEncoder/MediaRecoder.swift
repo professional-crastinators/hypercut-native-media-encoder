@@ -31,7 +31,7 @@ public struct MediaRecoder {
     } progress: { value in
       progress(value)
     } failure: { error in
-      fatalError(error.localizedDescription)
+      print(error.localizedDescription)
     }
 
   }
