@@ -54,13 +54,6 @@ public struct HypercutExportSession {
     tracktimebuilder.reserveCapacity(keptPhrases.count * 2 + 1)
     
     for i in keptPhrases {
-      let phrase = phrases[i]
-      let phraseDuration = (phrase.end - phrase.start) / configuration.playbackSpeed
-      let phraseTrack = TrackTime(
-        start: phrase.start, 
-        end: phrase.end, 
-        duration: phraseDuration)
-      tracktimebuilder.append(phraseTrack)
       
       if keptPhrases.contains(i - 1) {
         let space = spaces[i]
@@ -73,6 +66,14 @@ public struct HypercutExportSession {
           duration: spaceDuration)
         tracktimebuilder.append(spaceTrack)
       }
+      
+      let phrase = phrases[i]
+      let phraseDuration = (phrase.end - phrase.start) / configuration.playbackSpeed
+      let phraseTrack = TrackTime(
+        start: phrase.start, 
+        end: phrase.end, 
+        duration: phraseDuration)
+      tracktimebuilder.append(phraseTrack)
     }
     
     return HypercutExportPlan(timecodes: tracktimebuilder, runtime: {
