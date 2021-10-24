@@ -42,19 +42,18 @@ extension AVAsset {
       return
     }
     
+    exportSession.outputURL = url
+    exportSession.outputFileType = .mov
     
     if let sourceVideoTrack = tracks(withMediaType: .video).first {
       let instruction = AVMutableVideoCompositionInstruction()
       instruction.timeRange = sourceVideoTrack.timeRange
       let mutableComposition = AVMutableVideoComposition()
-      mutableComposition.renderSize = exportSession.videoComposition!.renderSize
-      mutableComposition.frameDuration = exportSession.videoComposition!.frameDuration
-      mutableComposition.instructions = exportSession.videoComposition!.instructions + [instruction]
+      mutableComposition.renderSize = sourceVideoTrack.naturalSize
+      mutableComposition.frameDuration = sourceVideoTrack.minFrameDuration
+      mutableComposition.instructions = (exportSession.videoComposition?.instructions ?? []) + [instruction]
       exportSession.videoComposition = mutableComposition
     }
-    
-    exportSession.outputURL = url
-    exportSession.outputFileType = .mov
     
     exportSession.exportAsynchronously {
       switch exportSession.status {
