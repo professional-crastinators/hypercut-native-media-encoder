@@ -47,7 +47,9 @@ extension AVAsset {
       let instruction = AVMutableVideoCompositionInstruction()
       instruction.timeRange = sourceVideoTrack.timeRange
       let mutableComposition = AVMutableVideoComposition()
-      mutableComposition.instructions = [instruction]
+      mutableComposition.renderSize = exportSession.videoComposition!.renderSize
+      mutableComposition.frameDuration = exportSession.videoComposition!.frameDuration
+      mutableComposition.instructions = exportSession.videoComposition!.instructions + [instruction]
       exportSession.videoComposition = mutableComposition
     }
     
