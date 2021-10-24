@@ -44,9 +44,9 @@ public struct HypercutExportSession {
     let keptPhrases = phrases
       .enumerated()
       .filter { (_, phrase) in
-        phrase.priority > max(
+        phrase.priority > min(
           Int(CGFloat(phrases.count) * configuration.phraseSpeed), 
-          phrases.count - 4)
+          phrases.count - 2)
       }
       .map { (i, _) in i }
     
