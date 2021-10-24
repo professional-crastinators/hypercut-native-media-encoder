@@ -18,11 +18,13 @@ extension AVAsset {
     progress: @escaping (Float) -> (),
     failure: @escaping (Error) -> ()
   ) {
-    do {
-      let asset = try speedAsset(timecodes: timecodes, progress: progress)
-      asset.writeCut(to: url, success: success, failure: failure)
-    } catch {
-      failure(error)
+    DispatchQueue.main.async {
+      do {
+        let asset = try speedAsset(timecodes: timecodes, progress: progress)
+        asset.writeCut(to: url, success: success, failure: failure)
+      } catch {
+        failure(error)
+      }
     }
   }
   

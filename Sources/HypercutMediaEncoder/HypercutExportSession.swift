@@ -44,7 +44,9 @@ public struct HypercutExportSession {
     let keptPhrases = phrases
       .enumerated()
       .filter { (_, phrase) in
-        phrase.priority > Int(CGFloat(phrases.count) * configuration.phraseSpeed)
+        phrase.priority > max(
+          Int(CGFloat(phrases.count) * configuration.phraseSpeed), 
+          phrases.count - 4)
       }
       .map { (i, _) in i }
     
@@ -64,7 +66,7 @@ public struct HypercutExportSession {
         let space = spaces[i]
         let spaceDuration = (space.end - space.start)
           / configuration.playbackSpeed
-          * (1 - configuration.pauseSpeed)
+        * (1 - max(configuration.pauseSpeed, 0.01))
         let spaceTrack = TrackTime(
           start: space.start, 
           end: space.end, 

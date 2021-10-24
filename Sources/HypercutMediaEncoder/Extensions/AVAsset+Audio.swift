@@ -15,11 +15,13 @@ extension AVAsset {
     success: @escaping () -> (),
     failure: @escaping (Error) -> ()
   ) {
-    do {
-      let asset = try audioAsset()
-      asset.writeAudio(to: url, success: success, failure: failure)
-    } catch {
-      failure(error)
+    DispatchQueue.main.async {
+      do {
+        let asset = try audioAsset()
+        asset.writeAudio(to: url, success: success, failure: failure)
+      } catch {
+        failure(error)
+      }
     }
   }
   
