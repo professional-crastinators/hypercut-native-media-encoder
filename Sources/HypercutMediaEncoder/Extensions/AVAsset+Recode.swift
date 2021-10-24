@@ -36,7 +36,7 @@ extension AVAsset {
     
     guard let exportSession = AVAssetExportSession(
       asset: self,
-      presetName: AVAssetExportPresetHighestQuality
+      presetName: AVAssetExportPresetPassthrough
     ) else {
       failure(MediaEncoderError.failExport)
       return
