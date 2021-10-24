@@ -15,15 +15,15 @@ struct TrackTime {
   var duration: Double
   
   var startTime: CMTime {
-    .init(seconds: start, preferredTimescale: 1)
+    .init(seconds: start * 1000, preferredTimescale: 1000)
   }
   
   var endTime: CMTime {
-    .init(seconds: end, preferredTimescale: 1)
+    .init(seconds: end * 1000, preferredTimescale: 1000)
   }
   
   var durationTime: CMTime {
-    .init(seconds: duration, preferredTimescale: 1)
+    .init(seconds: duration * 1000, preferredTimescale: 1000)
   }
   
   init(start: Double, end: Double, duration: Double) {
