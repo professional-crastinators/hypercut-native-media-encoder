@@ -21,7 +21,7 @@ extension AVAsset {
     DispatchQueue.main.async {
       do {
         let asset = try self.speedAsset(timecodes: timecodes, progress: progress)
-        asset.writeCut(to: url, success: success, failure: failure)
+        asset.writeCut(to: url, highQuality: timecodes.highQuality, success: success, failure: failure)
       } catch {
         failure(error)
       }
@@ -30,13 +30,16 @@ extension AVAsset {
   
   private func writeCut(
     to url: URL,
+    highQuality: Bool,
     success: @escaping () -> (),
     failure: @escaping (Error) -> ()
   ) {
     
     guard let exportSession = AVAssetExportSession(
       asset: self,
-      presetName: AVAssetExportPresetMediumQuality
+      presetName: highQuality
+        ? AVAssetExportPresetHighestQuality
+        : AVAssetExportPresetMediumQuality
     ) else {
       failure(MediaEncoderError.failExport)
       return

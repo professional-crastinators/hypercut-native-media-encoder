@@ -13,16 +13,19 @@ public struct HypercutExportConfiguration {
   public init(
     pauseSpeed: CGFloat,
     phraseSpeed: CGFloat,
-    playbackSpeed: CGFloat
+    playbackSpeed: CGFloat,
+    highQuality: Bool
   ) {
     self.pauseSpeed = pauseSpeed
     self.phraseSpeed = phraseSpeed
     self.playbackSpeed = playbackSpeed * 3 + 1
+    self.highQuality = highQuality
   }
   
   public var pauseSpeed: CGFloat
   public var phraseSpeed: CGFloat
   public var playbackSpeed: CGFloat
+  public var highQuality: Bool
 }
 
 public struct HypercutExportSession {
@@ -80,7 +83,7 @@ public struct HypercutExportSession {
       tracktimebuilder.reduce(0.0) { resultBuilder, trackTime in
         return resultBuilder + trackTime.duration
       }
-    }())
+    }(), highQuality: configuration.highQuality)
   }
   
 }
@@ -88,4 +91,5 @@ public struct HypercutExportSession {
 public struct HypercutExportPlan {
   var timecodes: [TrackTime]
   public var runtime: Double
+  var highQuality: Bool
 }
