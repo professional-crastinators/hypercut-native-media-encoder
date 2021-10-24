@@ -46,12 +46,21 @@ extension AVAsset {
     exportSession.outputFileType = .mov
     
     if let sourceVideoTrack = tracks(withMediaType: .video).first {
-      let instruction = AVMutableVideoCompositionInstruction()
-      instruction.timeRange = sourceVideoTrack.timeRange
+      let mainInstruction = AVMutableVideoCompositionInstruction()
+      mainInstruction.timeRange = sourceVideoTrack.timeRange
       let mutableComposition = AVMutableVideoComposition()
       mutableComposition.renderSize = sourceVideoTrack.naturalSize
       mutableComposition.frameDuration = sourceVideoTrack.minFrameDuration
-      mutableComposition.instructions = (exportSession.videoComposition?.instructions ?? []) + [instruction]
+      
+      let scale : CGAffineTransform = CGAffineTransform(scaleX: 1, y:1)
+      for videoTrack in tracks(withMediaType: .video) {
+        let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videoTrack)
+        instruction.setTransform(
+          sourceVideoTrack.preferredTransform.concatenating(scale), at: .zero)
+        mainInstruction.layerInstructions.append(instruction)
+      }
+      
+      mutableComposition.instructions = (exportSession.videoComposition?.instructions ?? []) + [mainInstruction]
       exportSession.videoComposition = mutableComposition
     }
     
