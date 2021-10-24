@@ -36,10 +36,19 @@ extension AVAsset {
     
     guard let exportSession = AVAssetExportSession(
       asset: self,
-      presetName: AVAssetExportPresetPassthrough
+      presetName: AVAssetExportPresetHighestQuality
     ) else {
       failure(MediaEncoderError.failExport)
       return
+    }
+    
+    
+    if let sourceVideoTrack = tracks(withMediaType: .video).first {
+      let instruction = AVMutableVideoCompositionInstruction()
+      instruction.timeRange = sourceVideoTrack.timeRange
+      let mutableComposition = AVMutableVideoComposition()
+      mutableComposition.instructions = [instruction]
+      exportSession.videoComposition = mutableComposition
     }
     
     exportSession.outputURL = url
@@ -101,6 +110,19 @@ extension AVAsset {
         callback()
       }
     }
+    
+//    var maxDuration: CMTimeValue = .zero
+//    var maxTrack: AVMutableCompositionTrack!
+//    for track in composition.tracks {
+//      if track.timeRange.duration.value > maxDuration {
+//        maxDuration = track.timeRange.duration.value
+//        maxTrack = maxTrack
+//      }
+//    }
+//    
+//    var validTimeRange: CMTimeRange = maxTrack.timeRange
+//    
+//    AVMutableVideoCompositionInstruction
     
     progress(1.0)
     
