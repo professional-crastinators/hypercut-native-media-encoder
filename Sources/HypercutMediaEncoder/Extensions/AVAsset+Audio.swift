@@ -17,7 +17,7 @@ extension AVAsset {
   ) {
     DispatchQueue.main.async {
       do {
-        let asset = try audioAsset()
+        let asset = try self.audioAsset()
         asset.writeAudio(to: url, success: success, failure: failure)
       } catch {
         failure(error)

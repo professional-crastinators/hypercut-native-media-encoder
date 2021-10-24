@@ -20,7 +20,7 @@ extension AVAsset {
   ) {
     DispatchQueue.main.async {
       do {
-        let asset = try speedAsset(timecodes: timecodes, progress: progress)
+        let asset = try self.speedAsset(timecodes: timecodes, progress: progress)
         asset.writeCut(to: url, success: success, failure: failure)
       } catch {
         failure(error)
